@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}Transactions — Mullein Bank{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">Transaction History</div>
+    <div class="page-subtitle">Monthly statement for account {{ account.account_number }}</div>
+</div>
+
+<!-- Month / Year Filter -->
+<div class="card-metallic" style="margin-bottom: 1.5rem;">
+    <div class="card-body" style="padding: 1rem 1.5rem;">
+        <form method="get" action="{% url 'transactions' %}" class="filter-form">
+            <div>
+                <label class="form-label">Month</label>
+                <select name="month" class="filter-select">
+                    {% for num, name in months %}
+                    <option value="{{ num }}" {% if num == selected_month %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="form-label">Year</label>
+                <select name="year" class="filter-select">
+                    {% for y in years %}
+                    <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+                <button type="submit" class="btn btn-metallic">Apply Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Transactions Table -->
+<div class="card-metallic">
+    <div class="card-header">
+        Statement —
+        {% for num, name in months %}{% if num == selected_month %}{{ name }}{% endif %}{% endfor %}
+        {{ selected_year }}
+    </div>
+    {% if transactions %}
+    <table class="table-metallic">
+        <thead>
+            <tr>
+                <th>Date &amp; Time</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Note</th>
+                <th>Balance After</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tx in transactions %}
+            <tr>
+                <td class="text-muted mono">{{ tx.timestamp|date:"M d, Y  H:i" }}</td>
+                <td>
+                    {% if tx.type == 'deposit' %}
+                        <span class="badge badge-deposit">Deposit</span>
+                    {% else %}
+                        <span class="badge badge-withdrawal">Withdrawal</span>
+                    {% endif %}
+                </td>
+                <td class="{% if tx.type == 'deposit' %}text-success{% else %}text-danger{% endif %} fw-semibold">
+                    {% if tx.type == 'deposit' %}+{% else %}-{% endif %}${{ tx.amount|floatformat:2 }}
+                </td>
+                <!-- V12 (CWE-79): Stored XSS — |safe bypasses Django auto-escaping.
+                     Try depositing with description: <img src=x onerror=alert(document.cookie)> -->
+                <td>{{ tx.description|safe }}</td>
+                <td>${{ tx.balance_after|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">&#9783;</div>
+        <div>No transactions found for this period.</div>
+        <div style="margin-top: 0.5rem;">
+            <a href="{% url 'deposit' %}" class="link-gold">Make your first deposit &rarr;</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% if transactions %}
+<!-- Summary strip -->
+<div class="stats-row" style="margin-top: 1rem;">
+    <div class="stat-item">
+        <div class="stat-value">{{ transactions|length }}</div>
+        <div class="stat-label">Transactions</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value text-success">
+            +${% with total=0 %}
+              {% for tx in transactions %}{% if tx.type == 'deposit' %}{{ tx.amount|floatformat:2 }}{% endif %}{% endfor %}
+            {% endwith %}
+        </div>
+        <div class="stat-label">Total Deposits</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-value text-danger">
+            -${% for tx in transactions %}{% if tx.type == 'withdrawal' %}{{ tx.amount|floatformat:2 }}{% endif %}{% endfor %}
+        </div>
+        <div class="stat-label">Total Withdrawals</div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

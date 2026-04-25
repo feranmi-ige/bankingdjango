@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Account Search — Mullein Bank{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">Account Search</div>
+    <div class="page-subtitle">
+        Internal account lookup utility
+        <!-- V8/V9 Note for students: try ?q=' OR '1'='1 and ?sort=id)%20UNION%20SELECT... -->
+    </div>
+</div>
+
+<div class="card-metallic" style="margin-bottom: 1.5rem;">
+    <div class="card-header">Search Accounts</div>
+    <div class="card-body">
+        <form method="get" action="{% url 'account_search' %}" class="filter-form">
+            <div style="flex: 1;">
+                <label class="form-label">Account Number</label>
+                <input type="text" name="q" class="form-control-metallic"
+                       placeholder="Enter account number or partial match"
+                       value="{{ query }}">
+            </div>
+            <div>
+                <label class="form-label">Sort By</label>
+                <input type="text" name="sort" class="form-control-metallic"
+                       placeholder="account_number"
+                       value="{{ sort }}" style="width: 180px;">
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+                <button type="submit" class="btn btn-metallic">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if results %}
+<div class="card-metallic">
+    <div class="card-header">Results ({{ results|length }} found)</div>
+    <table class="table-metallic">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Account Number</th>
+                <th>Balance</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in results %}
+            <tr>
+                <td class="text-muted">{{ r.id }}</td>
+                <td class="mono">{{ r.account_number }}</td>
+                <td class="text-gold">${{ r.balance|floatformat:2 }}</td>
+                <td>
+                    <a href="/api/transactions/{{ r.id }}/" class="link-gold" target="_blank">
+                        View Transactions
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% elif query %}
+<div class="card-metallic">
+    <div class="empty-state">
+        <div class="empty-icon">&#9906;</div>
+        <div>No accounts matched "<strong>{{ query }}</strong>".</div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

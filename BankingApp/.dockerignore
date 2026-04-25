@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitignore
+*.md
+node_modules/
+server.js
+package.json
+package-lock.json
+user.json
+Public/
+database/

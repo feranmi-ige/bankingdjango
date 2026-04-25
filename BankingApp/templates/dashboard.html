@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — Mullein Bank{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">Welcome back, {{ user.username }}</div>
+    <div class="page-subtitle">Here is your financial summary</div>
+</div>
+
+<!-- Balance Card -->
+<div class="balance-card">
+    <div class="balance-card-shine"></div>
+    <div class="balance-top">
+        <div>
+            <div class="balance-label">Available Balance</div>
+            <div class="balance-amount">${{ account.balance|floatformat:2 }}</div>
+            <div class="balance-currency">Canadian Dollar (CAD)</div>
+        </div>
+        <div class="balance-badge">ACTIVE</div>
+    </div>
+    <div class="balance-meta">
+        <div>
+            <div class="meta-label">Account Number</div>
+            <div class="meta-value">{{ account.account_number }}</div>
+        </div>
+        <div>
+            <div class="meta-label">Account Holder</div>
+            <div class="meta-value">{{ user.get_full_name|default:user.username }}</div>
+        </div>
+        <div>
+            <div class="meta-label">Member Since</div>
+            <div class="meta-value">{{ account.created_at|date:"M Y" }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="section-title">Quick Actions</div>
+<div class="action-grid">
+    <a href="{% url 'deposit' %}" class="action-btn">
+        <div class="action-icon">&#8595;</div>
+        <div class="action-label">Deposit</div>
+        <div class="action-desc">Add funds to your account</div>
+    </a>
+    <a href="{% url 'withdraw' %}" class="action-btn">
+        <div class="action-icon">&#8593;</div>
+        <div class="action-label">Withdraw</div>
+        <div class="action-desc">Transfer funds out</div>
+    </a>
+    <a href="{% url 'transactions' %}" class="action-btn">
+        <div class="action-icon">&#9783;</div>
+        <div class="action-label">Transactions</div>
+        <div class="action-desc">View monthly history</div>
+    </a>
+    <a href="{% url 'account_search' %}" class="action-btn">
+        <div class="action-icon">&#9906;</div>
+        <div class="action-label">Account Search</div>
+        <div class="action-desc">Look up accounts</div>
+    </a>
+</div>
+
+<!-- Recent Transactions -->
+<div class="section-title" style="margin-top: 2rem;">Recent Activity</div>
+<div class="card-metallic">
+    {% if recent_transactions %}
+    <table class="table-metallic">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Note</th>
+                <th>Date</th>
+                <th>Balance After</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tx in recent_transactions %}
+            <tr>
+                <td>
+                    {% if tx.type == 'deposit' %}
+                        <span class="badge badge-deposit">Deposit</span>
+                    {% else %}
+                        <span class="badge badge-withdrawal">Withdrawal</span>
+                    {% endif %}
+                </td>
+                <td class="{% if tx.type == 'deposit' %}text-success{% else %}text-danger{% endif %}">
+                    {% if tx.type == 'deposit' %}+{% else %}-{% endif %}${{ tx.amount|floatformat:2 }}
+                </td>
+                <!-- V12 (CWE-79): Stored XSS — description rendered without HTML escaping.
+                     Deposit or withdraw with description: <script>alert('XSS')</script>
+                     to demonstrate execution. -->
+                <td>{{ tx.description|safe }}</td>
+                <td class="text-muted">{{ tx.timestamp|date:"M d, Y  H:i" }}</td>
+                <td>${{ tx.balance_after|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">&#9783;</div>
+        <div>No transactions yet. Make your first deposit to get started.</div>
+    </div>
+    {% endif %}
+</div>
+
+<div style="margin-top: 1rem; text-align: right;">
+    <a href="{% url 'transactions' %}" class="btn btn-metallic">View All Transactions &rarr;</a>
+</div>
+{% endblock %}

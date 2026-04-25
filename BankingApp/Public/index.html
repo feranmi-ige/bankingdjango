@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking App</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Banking App Auto Deploy</h1>
+
+        <!-- Login/Register Section -->
+        <div id="auth-section">
+            <h2>Login or Register</h2>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <button id="login-btn">Login</button>
+            <button id="register-btn">Register</button>
+            <p id="auth-message"></p>
+        </div>
+
+        <!-- Banking Section (Visible after login) -->
+        <div id="banking-section" style="display: none;">
+            <h2>Banking Operations</h2>
+            <p>Balance: <span id="balance">$0.00 CAD</span></p>
+            <input type="number" id="amount" placeholder="Amount in CAD">
+            <button id="deposit-btn">Deposit</button>
+            <button id="withdraw-btn">Withdraw</button>
+            <button id="logout-btn">Logout</button>
+            <p id="operation-message"></p>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In — Mullein Bank</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <div class="auth-logo-icon">M</div>
+            <div class="auth-title">Mullein Bank</div>
+            <div class="auth-subtitle">Online Banking Portal</div>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control-metallic" placeholder="Enter your username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control-metallic" placeholder="Enter your password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn btn-gold" style="width:100%; margin-top: 0.5rem;">
+                Sign In to Account
+            </button>
+        </form>
+
+        <hr class="divider">
+
+        <p class="auth-footer-text">
+            New to Mullein Bank?
+            <a href="{% url 'register' %}" class="link-gold">Open an account</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

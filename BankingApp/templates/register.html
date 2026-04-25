@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Account — Mullein Bank</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card" style="max-width: 480px;">
+
+        <div class="auth-logo">
+            <div class="auth-logo-icon">M</div>
+            <div class="auth-title">Mullein Bank</div>
+            <div class="auth-subtitle">Create Your Account</div>
+        </div>
+
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control-metallic" placeholder="Choose a username" required
+                       value="{{ form.username.value|default:'' }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-control-metallic" placeholder="you@example.com" required
+                       value="{{ form.email.value|default:'' }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password1" class="form-control-metallic" placeholder="Create a password" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="password2" class="form-control-metallic" placeholder="Repeat your password" required>
+            </div>
+
+            <button type="submit" class="btn btn-gold" style="width:100%; margin-top: 0.5rem;">
+                Open Account
+            </button>
+        </form>
+
+        <hr class="divider">
+
+        <p class="auth-footer-text">
+            Already have an account?
+            <a href="{% url 'login' %}" class="link-gold">Sign in here</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

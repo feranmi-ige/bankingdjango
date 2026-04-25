@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mullein Bank{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}" class="navbar-brand">
+        <div class="bank-logo">M</div>
+        <div>
+            <span class="brand-name">Mullein Bank</span>
+            <span class="brand-tagline">Secure Digital Banking</span>
+        </div>
+    </a>
+
+    {% if user.is_authenticated %}
+    <div class="nav-links">
+        <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+        <a href="{% url 'deposit' %}" class="nav-link {% if request.resolver_match.url_name == 'deposit' %}active{% endif %}">
+            Deposit
+        </a>
+        <a href="{% url 'withdraw' %}" class="nav-link {% if request.resolver_match.url_name == 'withdraw' %}active{% endif %}">
+            Withdraw
+        </a>
+        <a href="{% url 'transactions' %}" class="nav-link {% if request.resolver_match.url_name == 'transactions' %}active{% endif %}">
+            Transactions
+        </a>
+        <a href="{% url 'logout' %}" class="nav-link logout-link">Logout</a>
+    </div>
+    {% endif %}
+</nav>
+
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <span>© 2024 Mullein Bank &nbsp;|&nbsp; Routing No: 001-MULLEIN &nbsp;|&nbsp; FDIC Insured</span>
+</footer>
+
+</body>
+</html>
