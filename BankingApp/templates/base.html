@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mullein Bank{% endblock %}</title>
+    <title>{% block title %}Yarrow Mullein Bank{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
@@ -11,9 +11,23 @@
 
 <nav class="navbar">
     <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}" class="navbar-brand">
-        <div class="bank-logo">M</div>
+        <svg width="45" height="45" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; margin-right: 12px;">
+            <!-- Indigenous-inspired feather logo for Manitoba -->
+            <path d="M 40 10 Q 38 35 40 60 Q 42 35 40 10" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M 40 20 Q 30 22 28 25" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 40 30 Q 25 32 22 38" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 40 40 Q 20 42 16 50" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 40 50 Q 24 52 20 62" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 40 20 Q 50 22 52 25" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 40 30 Q 55 32 58 38" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 40 40 Q 60 42 64 50" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 40 50 Q 56 52 60 62" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="40" cy="68" r="3" fill="#c9a84c" opacity="0.8"/>
+            <circle cx="35" cy="65" r="2" fill="#c9a84c" opacity="0.6"/>
+            <circle cx="45" cy="65" r="2" fill="#c9a84c" opacity="0.6"/>
+        </svg>
         <div>
-            <span class="brand-name">Mullein Bank</span>
+            <span class="brand-name">Yarrow Mullein Bank</span>
             <span class="brand-tagline">Secure Digital Banking</span>
         </div>
     </a>
@@ -42,7 +56,7 @@
 </main>
 
 <footer class="footer">
-    <span>© 2026 Mullein Bank &nbsp;|&nbsp; Routing No: 001-MULLEIN &nbsp;|&nbsp; FDIC Insured</span>
+    <span>© 2026 Yarrow Mullein Bank &nbsp;|&nbsp; Routing No: 001-MULLEIN &nbsp;|&nbsp; FDIC Insured</span>
 </footer>
 
 </body>

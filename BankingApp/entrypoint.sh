@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== Mullein Bank Startup ==="
+echo "=== Yarrow Mullein Bank Startup ==="
 
 echo "[*] Running migrations..."
 python manage.py makemigrations banking --noinput
@@ -18,5 +18,5 @@ else:
     print('[*] Admin user already exists')
 "
 
-echo "[*] Starting Mullein Bank on port 5090..."
+echo "[*] Starting Yarrow Mullein Bank on port 5090..."
 python manage.py runserver 0.0.0.0:5090
