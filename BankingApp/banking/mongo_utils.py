@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from django.conf import settings
-from datetime import datetime
+from django.utils import timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ def log_transaction(account_id, account_number, transaction_type, amount, descri
         'amount': float(amount),
         'description': description,
         'balance_after': float(balance_after) if balance_after is not None else None,
-        'timestamp': datetime.utcnow(),
+        'timestamp': timezone.localtime(timezone.now()),
     }
 
     # V5 (CWE-312): Sensitive financial data written to application logs in plaintext

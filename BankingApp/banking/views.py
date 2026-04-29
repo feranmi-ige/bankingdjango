@@ -1,6 +1,6 @@
 import logging
 import json
-from datetime import datetime
+from django.utils import timezone
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -136,7 +136,7 @@ def withdraw_view(request):
 @login_required
 def transactions_view(request):
     account = _get_or_create_account(request.user)
-    now = datetime.utcnow()
+    now = timezone.localtime(timezone.now())
     year = request.GET.get('year', now.year)
     month = request.GET.get('month', now.month)
 
